@@ -9,6 +9,51 @@
 <style>
 :root{--bg:#050816;--panel:#0b1225;--blue:#168bff;--cyan:#21e6ff;--text:#f5f7ff;--muted:#9aa7c2;--line:rgba(143,174,255,.17)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 75% 5%,#0b2451 0,transparent 34%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
+
+/* Loading Screen Styled Like Top-Left Brand Logo */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#loader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+.loader-brand-mark {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 3px solid var(--cyan);
+  box-shadow: 0 0 30px #087dffaa, inset 0 0 15px #087dff44;
+  color: var(--cyan);
+  font-size: 34px;
+  font-weight: 900;
+  background: #030814;
+  animation: pulseLogo 1.6s ease-in-out infinite;
+}
+.loader-loading-text {
+  font-size: 13px;
+  color: var(--cyan);
+  font-family: Inter, monospace;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+@keyframes pulseLogo {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 25px #087dffaa, inset 0 0 12px #087dff44; }
+  50% { transform: scale(1.08); box-shadow: 0 0 45px #21e6ffdd, inset 0 0 20px #21e6ff88; }
+}
+
 a{color:inherit;text-decoration:none}.wrap{width:min(1120px,92%);margin:auto}.nav{height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:1.2px}.brand-mark{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--cyan);box-shadow:0 0 18px #087dff77;color:var(--cyan);font-size:18px;font-weight:900}.brand span:last-child{color:var(--cyan)}.links{display:flex;gap:28px;color:#c4cee2;font-size:14px}.links a:hover{color:var(--cyan)}.menu{display:none;background:none;border:1px solid var(--line);color:white;border-radius:10px;padding:9px 12px;font-size:20px}
 .hero{min-height:690px;display:grid;grid-template-columns:1.08fr .92fr;align-items:center;gap:45px;padding:70px 0 90px}.eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--cyan);font-size:12px;letter-spacing:2.4px;font-weight:800;text-transform:uppercase}.dot{width:7px;height:7px;background:var(--cyan);border-radius:50%;box-shadow:0 0 12px var(--cyan)}h1{font-size:clamp(48px,7vw,82px);line-height:.98;letter-spacing:-4px;margin:22px 0}.gradient{background:linear-gradient(100deg,#fff 10%,#9ecbff 48%,#21e6ff 92%);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);font-size:17px;line-height:1.8;max-width:520px}.actions{display:flex;gap:13px;flex-wrap:wrap;margin-top:30px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:12px;font-weight:800;font-size:14px;border:1px solid var(--line);transition:.25s}.primary{background:linear-gradient(100deg,#087cff,#20d9ff);color:#031020;border:0;box-shadow:0 8px 30px #087cff35}.btn:hover{transform:translateY(-3px)}
 .visual{position:relative;display:grid;place-items:center;min-height:420px}
@@ -25,6 +70,13 @@ section{padding:78px 0}.section-head{display:flex;justify-content:space-between;
 </style>
 </head>
 <body>
+
+<!-- Matching Cyan Brand Mark Loading Screen -->
+<div id="loader">
+  <div class="loader-brand-mark">M</div>
+  <div class="loader-loading-text">Loading...</div>
+</div>
+
 <header class="wrap nav">
   <a class="brand" href="#home" aria-label="ImaadVFX home"><span class="brand-mark">M</span><span>Imaad<span>VFX</span></span></a>
   <nav class="links" id="navlinks"><a href="#home">Home</a><a href="#work">Work</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
@@ -85,6 +137,16 @@ section{padding:78px 0}.section-head{display:flex;justify-content:space-between;
   <div>All Right Reversed</div>
 </footer>
 <script>
+// Loading Screen Script
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loader');
+  
+  // Fade out loading screen smoothly once page loads
+  setTimeout(() => {
+    loader.classList.add('fade-out');
+  }, 1000);
+});
+
 const menu=document.getElementById('menu'), nav=document.getElementById('navlinks');
 menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.textContent=open?'✕':'☰'});
 nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰'}));
