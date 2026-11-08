@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050816">
+<meta name="description" content="ImaadVFX — visual effects, motion design, edits and creative experiments.">
+<title>ImaadVFX — Visuals Beyond Reality</title>
+<style>
+:root{--bg:#050816;--panel:#0b1225;--blue:#168bff;--cyan:#21e6ff;--text:#f5f7ff;--muted:#9aa7c2;--line:rgba(143,174,255,.17)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 75% 5%,#0b2451 0,transparent 34%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
+
+/* Loading Screen Styled Like Top-Left Brand Logo */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#loader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+.loader-brand-mark {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 3px solid var(--cyan);
+  box-shadow: 0 0 30px #087dffaa, inset 0 0 15px #087dff44;
+  color: var(--cyan);
+  font-size: 34px;
+  font-weight: 900;
+  background: #030814;
+  animation: pulseLogo 1.6s ease-in-out infinite;
+}
+.loader-loading-text {
+  font-size: 13px;
+  color: var(--cyan);
+  font-family: Inter, monospace;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+@keyframes pulseLogo {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 25px #087dffaa, inset 0 0 12px #087dff44; }
+  50% { transform: scale(1.08); box-shadow: 0 0 45px #21e6ffdd, inset 0 0 20px #21e6ff88; }
+}
+
+a{color:inherit;text-decoration:none}.wrap{width:min(1120px,92%);margin:auto}.nav{height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:1.2px}.brand-mark{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--cyan);box-shadow:0 0 18px #087dff77;color:var(--cyan);font-size:18px;font-weight:900}.brand span:last-child{color:var(--cyan)}.links{display:flex;gap:28px;color:#c4cee2;font-size:14px}.links a:hover{color:var(--cyan)}.menu{display:none;background:none;border:1px solid var(--line);color:white;border-radius:10px;padding:9px 12px;font-size:20px}
+.hero{min-height:690px;display:grid;grid-template-columns:1.08fr .92fr;align-items:center;gap:45px;padding:70px 0 90px}.eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--cyan);font-size:12px;letter-spacing:2.4px;font-weight:800;text-transform:uppercase}.dot{width:7px;height:7px;background:var(--cyan);border-radius:50%;box-shadow:0 0 12px var(--cyan)}h1{font-size:clamp(48px,7vw,82px);line-height:.98;letter-spacing:-4px;margin:22px 0}.gradient{background:linear-gradient(100deg,#fff 10%,#9ecbff 48%,#21e6ff 92%);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);font-size:17px;line-height:1.8;max-width:520px}.actions{display:flex;gap:13px;flex-wrap:wrap;margin-top:30px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:12px;font-weight:800;font-size:14px;border:1px solid var(--line);transition:.25s}.primary{background:linear-gradient(100deg,#087cff,#20d9ff);color:#031020;border:0;box-shadow:0 8px 30px #087cff35}.btn:hover{transform:translateY(-3px)}
+.visual{position:relative;display:grid;place-items:center;min-height:420px}
+.showreel-container{width:100%;max-width:280px;aspect-ratio:9/16;border-radius:18px;overflow:hidden;border:2px solid #168bff;box-shadow:0 0 30px #087cff55;background:#030814;position:relative}
+.showreel-container video{width:100%;height:100%;object-fit:cover;display:block}
+.float-tag{position:absolute;padding:12px 15px;border:1px solid var(--line);background:#081126d9;backdrop-filter:blur(10px);border-radius:12px;font-size:12px;color:#dbe8ff;box-shadow:0 15px 35px #0004;z-index:2}
+.tag-one{top:15%;left:-8%}.tag-two{bottom:15%;right:-8%}.float-tag b{color:var(--cyan);display:block;margin-bottom:3px;letter-spacing:1px}
+section{padding:78px 0}.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:30px}.kicker{color:var(--cyan);font-size:11px;letter-spacing:2px;font-weight:900;text-transform:uppercase}h2{font-size:clamp(30px,4vw,45px);letter-spacing:-1.5px;margin:10px 0}.section-head p{color:var(--muted);max-width:390px;line-height:1.6;margin:0}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{border:1px solid var(--line);background:linear-gradient(145deg,#0d1730,#080d1d);border-radius:18px;overflow:hidden;transition:.3s}.card:hover{transform:translateY(-6px);border-color:#168bff88}.thumb{height:205px;display:grid;place-items:center;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 45%,#164d91,#0a1530 48%,#070b17)}.thumb:before{content:"";position:absolute;width:190px;height:190px;border:1px solid #21e6ff99;border-radius:50%;box-shadow:0 0 30px #087cff44,inset 0 0 30px #087cff22}.thumb:after{content:"";position:absolute;width:240px;height:75px;border:3px solid #20dfff;border-radius:50%;transform:rotate(-28deg);box-shadow:0 0 20px #20dfff99}.thumb .symbol{z-index:1;font-size:54px;font-weight:950;color:white;text-shadow:0 0 22px #168bff}.thumb.purple{background:radial-gradient(circle at 50% 45%,#5229a0,#15102f 55%,#070b17)}.thumb.purple:after{border-color:#ba77ff;box-shadow:0 0 20px #a25cff99}.thumb.red{background:radial-gradient(circle at 50% 45%,#8a214b,#291027 55%,#070b17)}.thumb.red:after{border-color:#ff668f;box-shadow:0 0 20px #ff668f99}.card-body{padding:20px}.card-body small{color:var(--cyan);font-weight:800;letter-spacing:1.2px;text-transform:uppercase}.card h3{margin:9px 0;font-size:20px}.card p{color:var(--muted);font-size:14px;line-height:1.7;margin:0}.about{display:grid;grid-template-columns:.8fr 1.2fr;gap:50px;align-items:center}.about-panel{border:1px solid var(--line);background:linear-gradient(140deg,#0d1c3a,#070b18);padding:28px;border-radius:20px}.about-panel p{color:var(--muted);line-height:1.8}.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}.chip{font-size:12px;color:#cce7ff;border:1px solid #168bff55;background:#0a1a35;padding:9px 12px;border-radius:99px}
+.contact{border:1px solid #168bff55;border-radius:24px;padding:clamp(25px,5vw,55px);background:radial-gradient(ellipse at 100% 0,#0d3a65 0,transparent 55%),#080e20;display:flex;justify-content:space-between;align-items:center;gap:25px}
+.contact p{color:var(--muted);line-height:1.7;max-width:500px}
+.contact-actions{display:flex;flex-direction:column;gap:10px;min-width:220px}
+.footer{border-top:1px solid var(--line);padding:25px 0;color:#8390aa;font-size:12px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:none}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}.puzzle-project{display:grid;grid-template-columns:1fr 1fr;align-items:stretch}.puzzle-preview{padding:28px;display:grid;place-items:center;min-height:340px;background:radial-gradient(ellipse at 50% 35%,#064b52 0,#0b1930 48%,#070b17 100%)}.puzzle-window{width:100%;max-width:440px;border:1px solid #1d8b83;border-radius:16px;padding:20px;background:linear-gradient(145deg,#071426,#0b1727);box-shadow:0 0 30px #00d6a322}.puzzle-window-top{display:flex;align-items:center;justify-content:space-between;gap:8px;font:10px ui-monospace,monospace;color:#8da9bd;letter-spacing:.5px}.puzzle-lights{color:#36d6a0;letter-spacing:2px}.puzzle-status{color:#5af0bd;border:1px solid #1b7c69;padding:5px 7px;border-radius:6px}.puzzle-eyebrow{margin-top:25px;color:#54e5b0;font-size:10px;letter-spacing:2px;font-weight:900}.puzzle-title{font-size:clamp(32px,5vw,48px);font-weight:900;letter-spacing:-2px;margin-top:5px}.puzzle-title span{color:#42dfb0}.puzzle-tagline{font-size:12px;color:#a9bdcc;line-height:1.6}.puzzle-challenge{margin-top:20px;padding:15px;border:1px solid #1c4e57;border-radius:10px;background:#0c202e;display:grid;gap:9px}.puzzle-challenge small{font-size:9px;letter-spacing:1.5px;color:#45dcae}.puzzle-challenge strong{font:700 20px ui-monospace,monospace;color:#f2fbff;letter-spacing:1px}.puzzle-challenge span{font-size:10px;color:#9bb2c2}.puzzle-score{display:flex;justify-content:space-between;gap:10px;margin-top:15px;font-size:10px;color:#b7c9d8}.puzzle-score b{color:#50e2b4;margin-left:5px}.puzzle-project .card-body{padding:clamp(22px,4vw,38px);align-self:center}.puzzle-project .actions{margin-top:24px}@media(max-width:760px){.puzzle-project{grid-template-columns:1fr}.puzzle-preview{padding:20px;min-height:300px}.puzzle-window{padding:16px}.puzzle-project .actions{justify-content:flex-start}}@media(max-width:760px){.links{display:none;position:absolute;top:75px;left:4%;right:4%;padding:20px;background:#0a1124;border:1px solid var(--line);border-radius:14px;flex-direction:column;gap:18px;z-index:5}.links.open{display:flex}.menu{display:block}.hero{grid-template-columns:1fr;padding:65px 0 50px;gap:20px}.hero-copy{text-align:center}.hero p{margin:0 auto}.actions{justify-content:center}.visual{min-height:350px}.tag-one{left:3%}.tag-two{right:0}.cards{grid-template-columns:1fr}.thumb{height:220px}.section-head{display:block}.section-head p{margin-top:12px}.about{grid-template-columns:1fr;gap:22px}.contact{display:block}.contact-actions{margin-top:16px;width:100%}h1{letter-spacing:-2.5px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+
+/* PuzzleCell theme only — updated to the live site's navy and champagne-gold look */
+.puzzle-preview{
+  background:
+    radial-gradient(ellipse at 50% 22%,rgba(190,157,96,.13),transparent 48%),
+    linear-gradient(145deg,#111d2b 0%,#0c1724 58%,#090f18 100%);
+}
+.puzzle-window{
+  border-color:rgba(205,184,139,.38);
+  border-radius:22px;
+  background:linear-gradient(145deg,#1a2939,#101d2b);
+  box-shadow:0 18px 48px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);
+}
+.puzzle-window-top{color:#aeb9c7}
+.puzzle-lights{color:#d9c28f}
+.puzzle-status{
+  color:#ead6a2;
+  border-color:rgba(218,193,139,.42);
+  background:rgba(218,193,139,.08);
+}
+.puzzle-eyebrow{color:#e2cd9d}
+.puzzle-title span{
+  background:linear-gradient(110deg,#fff4d8 5%,#e3c98f 52%,#ae8950 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.puzzle-tagline{color:#b8c3d0}
+.puzzle-challenge{
+  border-color:rgba(174,190,210,.24);
+  border-radius:15px;
+  background:linear-gradient(145deg,#0c1927,#142438);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+}
+.puzzle-challenge small{color:#e5d09e}
+.puzzle-challenge strong{color:#f1dfb5}
+.puzzle-challenge span{color:#aebdcb}
+.puzzle-score{color:#bdc8d5}
+.puzzle-score b{color:#ead6a2}
+.puzzle-project .primary{
+  background:linear-gradient(105deg,#f0dfb4,#c39d61);
+  color:#17202b;
+  border:0;
+  box-shadow:0 8px 24px rgba(195,157,97,.2);
+}
+.puzzle-project .btn:not(.primary){
+  border-color:rgba(205,184,139,.32);
+  background:rgba(255,255,255,.045);
+}
+
+
+/* ===== ImaadVFX premium portfolio refresh: visual styling only ===== */
+:root{
+  --bg:#080d16;--panel:#111c2a;--blue:#c7a66c;--cyan:#ead6a2;
+  --text:#f7f4ed;--muted:#aeb8c6;--line:rgba(218,198,158,.18);
+}
+body{
+  background:
+    radial-gradient(ellipse at 76% 4%,rgba(177,143,82,.13),transparent 34%),
+    radial-gradient(ellipse at 12% 38%,rgba(58,78,105,.18),transparent 38%),
+    linear-gradient(145deg,#0b111b 0%,#080d16 65%,#0b1420 100%);
+}
+::selection{background:#c6a56b;color:#101722}
+a{transition:color .22s ease,border-color .22s ease,background .22s ease}
+.wrap{width:min(1160px,91%)}
+.nav{
+  height:88px;position:sticky;top:0;z-index:20;
+  background:rgba(8,13,22,.78);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(218,198,158,.13);
+}
+.brand{font-size:16px;letter-spacing:1.5px}
+.brand-mark{
+  width:44px;height:44px;border:1px solid #d7bd89;
+  color:#f0dfb8;background:linear-gradient(145deg,#1c2939,#0c1521);
+  box-shadow:0 0 0 5px rgba(210,181,125,.06),0 8px 28px #0006;
+}
+.brand span:last-child{color:#ead6a2}
+.brand span:last-child span{color:#ead6a2}
+.links{gap:30px;color:#c2c9d2;font-weight:600}
+.links a{position:relative;padding:8px 0}
+.links a:after{
+  content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;
+  background:linear-gradient(90deg,#a9854e,#f1dfb6);transition:right .25s ease;
+}
+.links a:hover{color:#f0dfb8}.links a:hover:after{right:0}
+.menu{border-color:var(--line);background:#ffffff08}
+.hero{min-height:700px;gap:clamp(28px,5vw,70px);padding:82px 0 100px}
+.eyebrow,.kicker{color:#d9bd86}
+.dot{background:#d9bd86;box-shadow:0 0 13px #d9bd86}
+h1{font-size:clamp(52px,7.6vw,90px);letter-spacing:-4.8px;line-height:.96}
+.gradient{
+  background:linear-gradient(105deg,#fff8e8 3%,#e6d0a0 48%,#a9824b 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{color:#b5bfcb;font-size:17px;line-height:1.9}
+.btn{
+  border:1px solid rgba(218,198,158,.25);border-radius:14px;
+  padding:15px 21px;background:rgba(255,255,255,.035);
+  color:#eee9dd;box-shadow:inset 0 1px rgba(255,255,255,.045);
+}
+.btn:hover{border-color:#d2b77f;background:rgba(210,183,127,.09);transform:translateY(-3px)}
+.primary{
+  background:linear-gradient(110deg,#f0dfb8,#c19b60);color:#171d25;
+  border:0;box-shadow:0 10px 28px rgba(171,132,69,.2);
+}
+.primary:hover{background:linear-gradient(110deg,#fff0cb,#d0ad75);color:#101720}
+.visual{min-height:460px}
+.showreel-container{
+  max-width:292px;border:1px solid rgba(221,196,145,.58);border-radius:25px;
+  background:#101a27;box-shadow:0 28px 75px #0008,0 0 45px rgba(194,159,94,.12);
+}
+.float-tag{
+  border:1px solid rgba(218,198,158,.24);background:rgba(16,26,39,.84);
+  backdrop-filter:blur(18px);border-radius:14px;color:#d8dce1;
+  box-shadow:0 18px 45px #0006;
+}
+.float-tag b{color:#e5cd9d}
+section{padding:92px 0}
+.section-head{margin-bottom:34px}
+h2{font-size:clamp(32px,4.2vw,49px);letter-spacing:-1.8px}
+.section-head p{color:#aeb8c6}
+.cards{gap:22px}
+.card{
+  border:1px solid rgba(218,198,158,.15);
+  background:linear-gradient(150deg,rgba(24,37,53,.96),rgba(11,19,30,.98));
+  border-radius:22px;box-shadow:0 16px 45px rgba(0,0,0,.17);
+}
+.card:hover{transform:translateY(-7px);border-color:rgba(218,190,132,.48);box-shadow:0 24px 55px #0005}
+.thumb{
+  background:radial-gradient(circle at 50% 45%,#4a3b2a,#182335 52%,#0c1420);
+}
+.thumb:before{border-color:#d5b77c88;box-shadow:0 0 34px #c5a36b33,inset 0 0 30px #c5a36b18}
+.thumb:after{border-color:#d7bb85;box-shadow:0 0 22px #d7bb8555}
+.thumb .symbol{color:#f5e9cf;text-shadow:0 0 24px #c7a66c77}
+.thumb.purple{background:radial-gradient(circle at 50% 45%,#51415c,#1a2030 55%,#0c1420)}
+.thumb.purple:after{border-color:#c4a5ce;box-shadow:0 0 20px #c4a5ce66}
+.thumb.red{background:radial-gradient(circle at 50% 45%,#68404a,#29202b 55%,#0c1420)}
+.thumb.red:after{border-color:#d99b91;box-shadow:0 0 20px #d99b9166}
+.card-body{padding:23px}
+.card-body small{color:#d9bd86}
+.card h3{font-size:21px;letter-spacing:-.4px}
+.card p,.about-panel p,.contact p{color:#b0bac7}
+.about{gap:60px}
+.about-panel{
+  border:1px solid rgba(218,198,158,.19);
+  background:linear-gradient(145deg,#172638,#0e1825);
+  border-radius:24px;padding:clamp(25px,4vw,38px);
+  box-shadow:0 20px 55px #0003,inset 0 1px rgba(255,255,255,.06);
+}
+.chip{
+  color:#e4d4b2;border:1px solid rgba(218,190,132,.25);
+  background:rgba(206,174,112,.07);padding:10px 14px;
+}
+.contact{
+  border:1px solid rgba(218,190,132,.3);border-radius:28px;
+  background:
+    radial-gradient(ellipse at 100% 0,rgba(183,145,82,.16),transparent 55%),
+    linear-gradient(145deg,#172638,#0d1724);
+  box-shadow:0 24px 65px #0004,inset 0 1px rgba(255,255,255,.06);
+}
+.contact-actions .btn{width:100%}
+.footer{border-color:rgba(218,198,158,.15);color:#8d99a9;padding:30px 0}
+#loader{background:radial-gradient(ellipse at center,#1b2938,#080d16 70%)}
+.loader-brand-mark{
+  border:1px solid #d9bd86;color:#f0dfb8;
+  background:#000;
+  box-shadow:0 0 0 7px rgba(210,181,125,.06),0 0 38px rgba(193,157,96,.22);
+}
+.loader-loading-text{color:#e5d09e}
+@keyframes pulseLogo{
+  0%,100%{transform:scale(1);box-shadow:0 0 25px rgba(193,157,96,.2),inset 0 0 12px rgba(193,157,96,.1)}
+  50%{transform:scale(1.06);box-shadow:0 0 42px rgba(218,190,132,.35),inset 0 0 20px rgba(218,190,132,.16)}
+}
+@media(max-width:760px){
+  .nav{height:74px}
+  .links{background:rgba(13,22,34,.97);backdrop-filter:blur(18px);border-color:rgba(218,198,158,.2)}
+  .hero{padding:62px 0 60px}
+  .visual{min-height:390px}
+  section{padding:70px 0}
+  .contact{padding:28px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+}
+
+
+/* ===== Project request builder — balanced, normal-sized controls ===== */
+#project-request{padding-top:72px;padding-bottom:72px}
+#project-request .section-head{margin-bottom:28px}
+#project-request .request-shell{
+  width:100%;padding:clamp(22px,3vw,36px);
+  border:1px solid #202b3d;border-radius:24px;
+  background:#0e1320;box-shadow:0 20px 55px rgba(0,0,0,.24);
+}
+#project-request .request-step{margin:0 0 38px}
+#project-request .request-step:nth-child(2){margin-bottom:38px}
+#project-request .request-step h3{
+  margin:0 0 18px;color:#e0e4ee;font-family:inherit;
+  font-size:17px;font-weight:700;letter-spacing:.3px;line-height:1.4;
+  text-transform:none
+}
+#project-request .project-type-grid,#project-request .feature-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px
+}
+#project-request .request-option{
+  min-height:86px;padding:16px 18px;border:1px solid #202b3d;border-radius:14px;
+  background:#111827;color:#cbd3e1;display:flex;flex-direction:row;
+  align-items:center;justify-content:flex-start;gap:13px;text-align:left;
+  font-family:inherit;font-size:16px;font-weight:600;line-height:1.4;
+  cursor:pointer;transition:border-color .2s,background .2s,transform .2s
+}
+#project-request .request-option .option-icon{height:24px;display:flex;align-items:center;font-size:0;flex:0 0 24px}
+#project-request .request-option .option-icon svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+#project-request .request-option:nth-child(1) .option-icon{color:#9b63f5}
+#project-request .request-option:nth-child(2) .option-icon{color:#11b8d2}
+#project-request .request-option:nth-child(3) .option-icon{color:#f6a51c}
+#project-request .request-option:nth-child(4) .option-icon{color:#34d3a1}
+#project-request .request-option:nth-child(5) .option-icon{color:#c47af0}
+#project-request .request-option:nth-child(6) .option-icon{color:#fb7185}
+#project-request .request-option:hover{transform:translateY(-2px);border-color:#58617a}
+#project-request .request-option.selected{
+  border-color:#7164df;background:#211f49;color:#f7f7ff;
+  box-shadow:inset 0 0 0 1px rgba(130,112,255,.16)
+}
+#project-request .feature-grid{gap:14px}
+#project-request .feature-option{
+  min-height:70px;padding:14px 16px;display:flex;align-items:center;gap:12px;
+  border:1px solid #202b3d;border-radius:14px;background:#111827;
+  color:#cbd3e1;font-size:15px;line-height:1.4;
+  cursor:pointer;transition:border-color .2s,background .2s
+}
+#project-request .feature-option:hover{border-color:#58617a}
+#project-request .feature-option input{
+  appearance:none;-webkit-appearance:none;width:20px;height:20px;flex:0 0 20px;
+  margin:0;border:1px solid #a5a8b0;border-radius:4px;background:#fff;cursor:pointer;
+  position:relative
+}
+#project-request .feature-option input:checked{background:#0878ed;border-color:#0878ed}
+#project-request .feature-option input:checked:after{
+  content:"";position:absolute;left:6px;top:2px;width:6px;height:11px;
+  border:solid white;border-width:0 2px 2px 0;transform:rotate(45deg)
+}
+#project-request .timeline-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+#project-request .timeline-option{
+  min-height:68px;padding:12px;border:1px solid #202b3d;border-radius:14px;
+  background:#111827;color:#cbd3e1;display:grid;place-items:center;text-align:center;
+  font-family:inherit;font-size:15px;font-weight:600;line-height:1.4;
+  cursor:pointer;transition:border-color .2s,background .2s
+}
+#project-request .timeline-option.selected{
+  border-color:#7164df;background:#211f49;color:#fff;
+  box-shadow:inset 0 0 0 1px rgba(130,112,255,.16)
+}
+#project-request .request-message{
+  margin:0 0 32px;padding:22px;border:1px solid #202b3d;border-radius:18px;
+  background:#030718
+}
+#project-request .request-message-head{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+  color:#aeb8ca;font:500 14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
+  margin:0 0 14px
+}
+#project-request .request-message-head span:last-child{color:#a27af2;max-width:180px}
+#project-request #generated-request{
+  white-space:pre-wrap;color:#7fe0bd;font:500 14px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;
+  overflow-wrap:anywhere;margin:0
+}
+#project-request .request-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+#project-request .request-actions .btn{
+  width:100%;min-height:52px;padding:14px 18px;border:0;border-radius:12px;
+  font-size:15px;font-weight:700;letter-spacing:0;
+  box-shadow:0 8px 22px rgba(0,0,0,.18)
+}
+#project-request .request-whatsapp{background:#079b70;color:#fff;box-shadow:0 8px 22px rgba(7,155,112,.18)!important}
+#project-request .request-email{background:#5146e8;color:#fff;box-shadow:0 8px 22px rgba(81,70,232,.2)!important}
+#project-request .request-note{color:#8793a5;font-size:13px;line-height:1.6;margin:14px 0 0}
+@media(max-width:760px){
+  #project-request{padding-top:55px;padding-bottom:55px}
+  #project-request .request-shell{padding:20px 16px;border-radius:20px}
+  #project-request .request-step{margin-bottom:30px}
+  #project-request .request-step:nth-child(2){margin-bottom:30px}
+  #project-request .request-step h3{margin-bottom:14px;font-size:16px;letter-spacing:0}
+  #project-request .project-type-grid,#project-request .feature-grid{gap:10px}
+  #project-request .request-option{min-height:68px;padding:12px;border-radius:12px;gap:10px;font-size:14px}
+  #project-request .request-option .option-icon svg{width:22px;height:22px}
+  #project-request .feature-option{min-height:60px;padding:11px 10px;gap:9px;border-radius:12px;font-size:13px}
+  #project-request .feature-option input{width:18px;height:18px;flex-basis:18px}
+  #project-request .feature-option input:checked:after{left:5px;top:1px;width:6px;height:10px}
+  #project-request .timeline-grid{gap:8px}
+  #project-request .timeline-option{min-height:58px;padding:9px 5px;border-radius:12px;font-size:13px}
+  #project-request .request-message{margin-bottom:24px;padding:16px;border-radius:16px}
+  #project-request .request-message-head{font-size:12px;gap:8px;margin-bottom:12px}
+  #project-request .request-message-head span:last-child{max-width:105px}
+  #project-request #generated-request{font-size:12px;line-height:1.7}
+  #project-request .request-actions{grid-template-columns:1fr;gap:10px}
+  #project-request .request-actions .btn{min-height:48px;border-radius:12px;font-size:14px}
+}
+@media(max-width:390px){
+  #project-request .project-type-grid,#project-request .feature-grid{grid-template-columns:1fr}
+}
+
+
+/* ===== Desktop header fit + pure black page background ===== */
+:root{
+  --bg:#000000;
+}
+html, body{
+  background:#000000 !important;
+}
+body{
+  background:#000000 !important;
+}
+.nav{
+  width: min(1320px, calc(100% - 48px));
+  max-width: none;
+  min-width: 0;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 0;
+  padding-right: 0;
+  gap: clamp(12px, 2vw, 28px);
+}
+.brand{
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.links{
+  flex: 1 1 auto;
+  min-width: 0;
+  justify-content: flex-end;
+  gap: clamp(12px, 1.8vw, 26px);
+  white-space: nowrap;
+}
+@media (min-width: 761px) and (max-width: 1050px){
+  .nav{width:calc(100% - 32px);gap:12px}
+  .brand{font-size:14px;letter-spacing:1px;gap:8px}
+  .brand-mark{width:38px;height:38px}
+  .links{gap:clamp(9px,1.25vw,14px);font-size:12px}
+}
+@media (min-width: 761px) and (max-width: 850px){
+  .links{gap:8px;font-size:11px}
+}
+
+
+
+/* ===== Full-width header fix for phones and desktops ===== */
+header.wrap.nav{
+  width:100% !important;
+  max-width:none !important;
+  min-width:0 !important;
+  margin:0 !important;
+  padding-left:clamp(16px,4vw,48px) !important;
+  padding-right:clamp(16px,4vw,48px) !important;
+  box-sizing:border-box !important;
+  background:#000 !important;
+  background-color:#000 !important;
+  border-bottom:1px solid rgba(218,198,158,.18);
+  overflow:visible;
+}
+@media(max-width:760px){
+  header.wrap.nav{
+    width:100% !important;
+    padding-left:16px !important;
+    padding-right:16px !important;
+    height:74px;
+  }
+  header.wrap.nav .brand{
+    min-width:0;
+    gap:9px;
+    font-size:clamp(13px,4vw,16px);
+  }
+  header.wrap.nav .brand-mark{
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+  }
+  header.wrap.nav .menu{
+    flex:0 0 auto;
+    margin-left:12px;
+  }
+  header.wrap.nav .links{
+    left:16px;
+    right:16px;
+    width:auto;
+  }
+}
+@media(min-width:761px){
+  header.wrap.nav{
+    padding-left:clamp(20px,3vw,48px) !important;
+    padding-right:clamp(20px,3vw,48px) !important;
+  }
+}
+
+
+/* ===== Final fixes: black loader, complete heading, responsive safety ===== */
+#loader {
+  background: #000 !important;
+  background-color: #000 !important;
+}
+#loader .loader-brand-mark {
+  background: #000;
+}
+.hero,
+.hero-copy,
+.visual {
+  min-width: 0;
+}
+.hero {
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+}
+.hero-copy h1 {
+  width: 100%;
+  max-width: 100%;
+  font-size: clamp(40px, 6.6vw, 86px);
+  letter-spacing: clamp(-4px, -.45vw, -1.5px);
+  line-height: 1.02;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+.hero-copy .gradient {
+  display: inline-block;
+  max-width: 100%;
+}
+.showreel-container {
+  min-width: 0;
+}
+.showreel-container video {
+  object-fit: cover;
+}
+@media (max-width: 760px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero-copy h1 {
+    font-size: clamp(40px, 11vw, 68px);
+    letter-spacing: clamp(-3px, -.5vw, -1.5px);
+    line-height: 1.04;
+  }
+}
+@media (max-width: 360px) {
+  .hero-copy h1 {
+    font-size: clamp(36px, 10.5vw, 42px);
+    letter-spacing: -1.5px;
+  }
+  .wrap {
+    width: min(100% - 32px, 1160px);
+  }
+}
+
+
+/* M logo badges: solid black background */
+.brand-mark, #loader .loader-brand-mark { background: #000 !important; }
+
+/* Official-style brand marks and readable labels for contact actions */
+.contact-brand-btn{display:flex;align-items:center;justify-content:flex-start;gap:12px;text-decoration:none}
+.brand-icon{width:22px;height:22px;flex:0 0 22px;fill:currentColor;display:block}
+.instagram-icon{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.instagram-icon .instagram-dot{fill:currentColor;stroke:none}
+.github-icon{fill:currentColor}
+.whatsapp-icon{display:block;flex:0 0 22px;width:22px;height:22px;overflow:visible;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.whatsapp-icon .wa-handset{fill:currentColor;stroke:none}
+.brand-arrow{margin-left:auto;opacity:.75}
+#project-request .contact-brand-btn{justify-content:center}
+#project-request .contact-brand-btn .brand-icon{width:20px;height:20px}
+@media(max-width:420px){.contact-actions .contact-brand-btn{font-size:13px;gap:9px}.contact-actions .brand-icon{width:20px;height:20px;flex-basis:20px}}
+
+
+
+/* Keep email contact labels on a single line, including narrow mobile screens */
+.contact-actions a[href^="mailto:"],
+#project-request a.request-email {
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+.contact-actions a[href^="mailto:"] {
+  gap: 8px;
+  font-size: clamp(10px, 3.2vw, 13px);
+  letter-spacing: -0.2px;
+}
+.contact-actions a[href^="mailto:"] .brand-icon {
+  flex: 0 0 20px;
+}
+.contact-actions a[href^="mailto:"] span:first-of-type {
+  white-space: nowrap;
+  min-width: 0;
+}
+
+</style>
+</head>
+<body>
+
+<!-- Matching Cyan Brand Mark Loading Screen -->
+<div id="loader">
+  <div class="loader-brand-mark">M</div>
+  <div class="loader-loading-text">Loading...</div>
+</div>
+
+<header class="wrap nav">
+  <a class="brand" href="#home" aria-label="ImaadVFX home"><span class="brand-mark">M</span><span>Imaad<span>VFX</span></span></a>
+  <nav class="links" id="navlinks"><a href="#home">Home</a><a href="#puzzlecell">PuzzleCell</a><a href="#project-request">Start a Project</a><a href="#work">Work</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
+  <button class="menu" id="menu" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+</header>
+<main>
+<section class="wrap hero" id="home">
+  <div class="hero-copy">
+    <div class="eyebrow"><span class="dot"></span> Creative VFX • Motion • Digital Art</div>
+    <h1>VISUALS<br><span class="gradient">BEYOND</span><br>REALITY.</h1>
+    <p>Welcome to ImaadVFX — a creative playground for visual effects, cinematic edits, motion graphics and imagination without limits.</p>
+    <div class="actions"><a class="btn primary" href="#work">Explore my work ↗</a><a class="btn" href="#contact">Let's connect</a></div>
+  </div>
+  <div class="visual" aria-label="ImaadVFX Showreel video showcase">
+    <div class="float-tag tag-one"><b>01 / REEL</b>Watch latest cuts</div>
+    <div class="showreel-container">
+      <video controls autoplay muted loop playsinline>
+        <source src="showreel.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <div class="float-tag tag-two"><b>VFX STUDIO</b>Imagine. Create. Repeat.</div>
+  </div>
+</section>
+
+<!-- Featured web project: PuzzleCell -->
+<section class="wrap" id="puzzlecell">
+  <div class="section-head reveal">
+    <div>
+      <div class="kicker">Featured web project</div>
+      <h2>PuzzleCell — <span class="gradient">Decode. Challenge. Conquer.</span></h2>
+    </div>
+    <p>A browser-based code-breaking game where players decode secret messages, earn points, and challenge the AI.</p>
+  </div>
+  <article class="card reveal puzzle-project">
+    <div class="puzzle-preview">
+      <div class="puzzle-window">
+        <div class="puzzle-window-top"><span class="puzzle-lights">● ● ●</span><span>PUZZLECELL // GAME NODE</span><span class="puzzle-status">ONLINE</span></div>
+        <div class="puzzle-eyebrow">DECODE • THINK • WIN</div>
+        <div class="puzzle-title">Puzzle<span>Cell</span></div>
+        <p class="puzzle-tagline">Crack the code. Earn points. Become the Code Boss.</p>
+        <div class="puzzle-challenge"><small>LEVEL 01 · WARM-UP</small><strong>Y0U 4R3 7H3 B0$$</strong><span>Decode the message to score a point.</span></div>
+        <div class="puzzle-score"><span>👑 YOU <b>0</b></span><span>VS</span><span>🤖 AI <b>0</b></span></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <small>01 / Web game · Interactive project</small>
+      <h3>Decode. Challenge. Conquer.</h3>
+      <p>PuzzleCell is an interactive code-breaking game built around secret messages, progressive challenges, score tracking, and an AI opponent. Players can start in guest mode and test their decoding skills right in the browser.</p>
+      <div class="chips"><span class="chip">Browser Game</span><span class="chip">Code Puzzles</span><span class="chip">Interactive UI</span><span class="chip">AI Challenge</span></div>
+      <div class="actions"><a class="btn primary" href="https://puzzlecell.github.io/" target="_blank" rel="noopener">Play PuzzleCell ↗</a><a class="btn" href="https://puzzlecell.github.io/" target="_blank" rel="noopener">View Live Website ↗</a></div>
+    </div>
+  </article>
+</section>
+
+<section class="wrap" id="work">
+  <div class="section-head reveal"><div><div class="kicker">Selected creations</div><h2>Featured <span class="gradient">work.</span></h2></div><p>A few creative directions from the ImaadVFX universe. Replace these sample cards with your own finished projects.</p></div>
+  <div class="cards">
+    <article class="card reveal"><div class="thumb"><div class="symbol">VFX</div></div><div class="card-body"><small>01 / Visual effects</small><h3>Cinematic Worlds</h3><p>Portals, energy effects and otherworldly scenes designed to make every frame feel epic.</p></div></article>
+    <article class="card reveal"><div class="thumb purple"><div class="symbol">✦ FX</div></div><div class="card-body"><small>02 / Motion design</small><h3>Motion Experiments</h3><p>Glowing typography, smooth transitions and animated graphics with a futuristic edge.</p></div></article>
+    <article class="card reveal"><div class="thumb red"><div class="symbol">EDIT</div></div><div class="card-body"><small>03 / Video editing</small><h3>Creative Edits</h3><p>Fast-paced edits, color, atmosphere and visual storytelling built around the beat.</p></div></article>
+  </div>
+</section>
+<section class="wrap" id="about">
+  <div class="about">
+    <div class="reveal"><div class="kicker">Behind the pixels</div><h2>Made with<br><span class="gradient">imagination.</span></h2></div>
+    <div class="about-panel reveal"><h3>Hey, welcome to ImaadVFX.</h3><p>This is a space for creative experiments and digital projects — from visual effects, cinematic edits, and motion graphics to interactive web experiences like PuzzleCell. The goal is simple: turn big ideas into visuals and experiences people remember.</p><div class="chips"><span class="chip">Visual Effects</span><span class="chip">Video Editing</span><span class="chip">Motion Graphics</span><span class="chip">Digital Art</span><span class="chip">Creative Design</span><span class="chip">Interactive Web Projects</span><span class="chip">PuzzleCell</span></div></div>
+  </div>
+</section>
+
+<section class="wrap" id="project-request">
+  <div class="section-head reveal">
+    <div><div class="kicker">Start something great</div><h2>Build your <span class="gradient">project brief.</span></h2></div>
+    <p>Choose what you need and send a clear project request directly to ImaadVFX.</p>
+  </div>
+  <div class="request-shell reveal">
+    <div class="request-step">
+      <h3>1. Select project type</h3>
+      <div class="project-type-grid" id="project-types">
+        <button class="request-option selected" type="button" data-project="Business Website"><span class="option-icon"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18M10 12v2h4v-2"/></svg></span><span>Business Website</span></button>
+        <button class="request-option" type="button" data-project="AI Web Application"><span class="option-icon"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M2 11v5M22 11v5M8 12h.01M16 12h.01M9 16h6"/></svg></span><span>AI Web Application</span></button>
+        <button class="request-option" type="button" data-project="High-Convert Landing Page"><span class="option-icon"><svg viewBox="0 0 24 24"><path d="M5 15c-2 0-3 2-3 5 3 0 5-1 5-3M9 14l-3-3c3-6 8-8 15-8-0 7-2 12-8 15l-4-4zM14 10h.01"/><path d="M8 16l-2 2"/></svg></span><span>High-Convert Landing</span></button>
+        <button class="request-option" type="button" data-project="Institute / Organization Portal"><span class="option-icon"><svg viewBox="0 0 24 24"><path d="m2 9 10-5 10 5-10 5L2 9zM6 11v5c4 3 8 3 12 0v-5M22 9v6"/></svg></span><span>Institute / Org Portal</span></button>
+        <button class="request-option" type="button" data-project="Creator Portfolio"><span class="option-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3-7 8-7s8 3 8 7M9 8h.01M15 8h.01"/></svg></span><span>Creator Portfolio</span></button>
+        <button class="request-option" type="button" data-project="Website Redesign"><span class="option-icon"><svg viewBox="0 0 24 24"><path d="M20 7h-5l2-2M4 17h5l-2 2"/><path d="M5 9a7 7 0 0 1 12-2l2 2M19 15a7 7 0 0 1-12 2l-2-2"/></svg></span><span>Site Redesign</span></button>
+      </div>
+    </div>
+    <div class="request-step">
+      <h3>2. Key features needed</h3>
+      <div class="feature-grid">
+        <label class="feature-option"><input type="checkbox" value="Smart AI API Integration"><span>Smart AI API Integration</span></label>
+        <label class="feature-option"><input type="checkbox" value="WhatsApp Direct Inquiry"><span>WhatsApp Lead Button</span></label>
+        <label class="feature-option"><input type="checkbox" value="Robotics / Code Helper"><span>Robotics / Code Helper</span></label>
+        <label class="feature-option"><input type="checkbox" value="Mobile Responsiveness"><span>100% Mobile Optimization</span></label>
+        <label class="feature-option"><input type="checkbox" value="Google SEO & Speed Boost"><span>Google SEO &amp; Speed Boost</span></label>
+        <label class="feature-option"><input type="checkbox" value="Custom Admin Portal"><span>Custom Admin Portal</span></label>
+      </div>
+    </div>
+    <div class="request-step">
+      <h3>3. Target timeline</h3>
+      <div class="timeline-grid" id="project-timelines">
+        <button class="timeline-option" type="button" data-timeline="Urgent (1 Week)">Urgent<br>(1 Week)</button>
+        <button class="timeline-option selected" type="button" data-timeline="Standard (2–3 Weeks)">Standard<br>(2–3 Weeks)</button>
+        <button class="timeline-option" type="button" data-timeline="Flexible">Flexible</button>
+      </div>
+    </div>
+    <div class="request-message">
+      <div class="request-message-head"><span>Generated Project Request Message:</span><span>〈/〉 Auto-Formatted</span></div>
+      <p id="generated-request" aria-live="polite"></p>
+    </div>
+    <div class="request-actions">
+      <a class="btn request-whatsapp contact-brand-btn" id="request-whatsapp" href="https://wa.me/919997554431" target="_blank" rel="noopener"><svg class="brand-icon whatsapp-icon" viewBox="0 0 24 24" role="img" aria-label="WhatsApp logo" xmlns="http://www.w3.org/2000/svg"><path class="wa-bubble" d="M20.2 11.8a8.2 8.2 0 0 1-12.1 7.2L4 20l1.1-4A8.2 8.2 0 1 1 20.2 11.8Z"/><path class="wa-handset" d="M9 8.2c.2-.4.5-.4.8-.4h.5c.2 0 .4.1.5.4l.8 1.8c.1.3.1.5-.1.7l-.6.7c-.2.2-.2.4-.1.6.6 1.1 1.5 2 2.6 2.6.2.1.4.1.6-.1l.7-.6c.2-.2.4-.2.7-.1l1.8.8c.3.1.4.3.4.5v.5c0 .3 0 .6-.4.8-.5.3-1.3.5-2 .3-1.2-.3-2.7-1.1-4.1-2.5-1.4-1.4-2.2-2.9-2.5-4.1-.2-.7 0-1.5.3-2Z"/></svg><span>Send Request via WhatsApp</span></a>
+      <a class="btn request-email contact-brand-btn" id="request-email" href="mailto:imaad.danish003@gmail.com"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 2v.4l9 6.1 9-6.1V7H3Zm18 10V9.8l-9 6.1-9-6.1V17h18Z"/></svg><span>Send Request via Email</span></a>
+    </div>
+    <p class="request-note">Your selections are used to prepare the message. You can review it in WhatsApp or your email app before sending.</p>
+  </div>
+</section>
+
+<section class="wrap" id="contact">
+  <div class="contact reveal">
+    <div>
+      <div class="kicker">Have an idea?</div>
+      <h2>Let's make it <span class="gradient">real.</span></h2>
+      <p>Got a project, collaboration idea or just want to say hello? Reach out via Instagram, WhatsApp, GitHub or E-Mail below!</p>
+    </div>
+    <div class="contact-actions">
+      <a class="btn primary contact-brand-btn" href="https://Instagram.com/imaadvfxofficial" target="_blank" rel="noopener"><svg class="brand-icon instagram-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle class="instagram-dot" cx="18" cy="6" r="1.2"/></svg><span>Instagram</span><span class="brand-arrow">↗</span></a>
+      <a class="btn contact-brand-btn" href="https://github.com/imaadvfx" target="_blank" rel="noopener"><svg class="brand-icon github-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .8a11.2 11.2 0 0 0-3.54 21.82c.56.1.76-.24.76-.54v-2.1c-3.1.67-3.76-1.32-3.76-1.32-.5-1.28-1.24-1.62-1.24-1.62-1.02-.7.08-.69.08-.69 1.12.08 1.7 1.15 1.7 1.15 1 1.7 2.62 1.2 3.26.92.1-.72.39-1.2.71-1.48-2.48-.28-5.09-1.24-5.09-5.53 0-1.22.44-2.22 1.15-3-.12-.28-.5-1.42.11-2.96 0 0 .94-.3 3.08 1.15a10.7 10.7 0 0 1 5.6 0c2.14-1.45 3.08-1.15 3.08-1.15.61 1.54.23 2.68.11 2.96.72.78 1.15 1.78 1.15 3 0 4.3-2.61 5.25-5.1 5.52.4.35.76 1.03.76 2.08v3.07c0 .3.2.65.77.54A11.2 11.2 0 0 0 12 .8Z"/></svg><span>GitHub</span><span class="brand-arrow">↗</span></a>
+      <a class="btn contact-brand-btn" href="https://wa.me/919997554431" target="_blank" rel="noopener"><svg class="brand-icon whatsapp-icon" viewBox="0 0 24 24" role="img" aria-label="WhatsApp logo" xmlns="http://www.w3.org/2000/svg"><path class="wa-bubble" d="M20.2 11.8a8.2 8.2 0 0 1-12.1 7.2L4 20l1.1-4A8.2 8.2 0 1 1 20.2 11.8Z"/><path class="wa-handset" d="M9 8.2c.2-.4.5-.4.8-.4h.5c.2 0 .4.1.5.4l.8 1.8c.1.3.1.5-.1.7l-.6.7c-.2.2-.2.4-.1.6.6 1.1 1.5 2 2.6 2.6.2.1.4.1.6-.1l.7-.6c.2-.2.4-.2.7-.1l1.8.8c.3.1.4.3.4.5v.5c0 .3 0 .6-.4.8-.5.3-1.3.5-2 .3-1.2-.3-2.7-1.1-4.1-2.5-1.4-1.4-2.2-2.9-2.5-4.1-.2-.7 0-1.5.3-2Z"/></svg><span>WhatsApp · +91 9997554431</span><span class="brand-arrow">↗</span></a>
+      <a class="btn contact-brand-btn" href="mailto:imaad.danish003@gmail.com"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 2v.4l9 6.1 9-6.1V7H3Zm18 10V9.8l-9 6.1-9-6.1V17h18Z"/></svg><span>Email · imaad.danish003@gmail.com</span><span class="brand-arrow">↗</span></a>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="wrap footer">
+  <div>Founder and Developer: Mohammad Imaad Danish</div>
+  <div>ImaadVFX</div>
+  <div>All Right Reversed</div>
+</footer>
+<script>
+(() => {
+  'use strict';
+
+  const init = () => {
+    const loader = document.getElementById('loader');
+    const menu = document.getElementById('menu');
+    const nav = document.getElementById('navlinks');
+
+    // Always release the loading screen, even if a later script fails.
+    if (loader) {
+      const hideLoader = () => {
+        loader.classList.add('fade-out');
+        window.setTimeout(() => {
+          if (loader.isConnected) loader.style.display = 'none';
+        }, 700);
+      };
+      if (document.readyState === 'complete') {
+        window.setTimeout(hideLoader, 350);
+      } else {
+        window.addEventListener('load', () => window.setTimeout(hideLoader, 350), { once: true });
+        window.setTimeout(hideLoader, 8000);
+      }
+    }
+
+    // Mobile navigation: safely no-op if either element is absent.
+    if (menu && nav) {
+      menu.addEventListener('click', () => {
+        const isOpen = nav.classList.toggle('open');
+        menu.setAttribute('aria-expanded', String(isOpen));
+        menu.textContent = isOpen ? '✕' : '☰';
+      });
+
+      nav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          nav.classList.remove('open');
+          menu.setAttribute('aria-expanded', 'false');
+          menu.textContent = '☰';
+        });
+      });
+
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          menu.setAttribute('aria-expanded', 'false');
+          menu.textContent = '☰';
+          menu.focus();
+        }
+      });
+    }
+
+    // Reveal animations with a fallback for browsers without IntersectionObserver.
+    const revealItems = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      revealItems.forEach(item => observer.observe(item));
+    } else {
+      revealItems.forEach(item => item.classList.add('visible'));
+    }
+
+    // Project request builder.
+    const typeButtons = Array.from(document.querySelectorAll('#project-types [data-project]'));
+    const timelineButtons = Array.from(document.querySelectorAll('#project-timelines [data-timeline]'));
+    const featureInputs = Array.from(document.querySelectorAll('#project-request .feature-option input'));
+    const messageEl = document.getElementById('generated-request');
+    const whatsapp = document.getElementById('request-whatsapp');
+    const email = document.getElementById('request-email');
+
+    if (!messageEl || !whatsapp || !email) return;
+
+    const selected = (buttons, attribute) =>
+      buttons.find(button => button.classList.contains('selected'))?.dataset[attribute] || '';
+
+    function updateRequest() {
+      const project = selected(typeButtons, 'project') || 'Business Website';
+      const timeline = selected(timelineButtons, 'timeline') || 'Standard (2–3 Weeks)';
+      const features = featureInputs
+        .filter(input => input.checked)
+        .map(input => input.value);
+
+      const message = `Hi Imaad! I would like to discuss building a ${project}${features.length ? ` with features: [${features.join(', ')}]` : ''}. Timeline: ${timeline}. Please let me know your availability!`;
+
+      messageEl.textContent = message;
+      whatsapp.href = 'https://wa.me/919997554431?text=' + encodeURIComponent(message);
+      email.href = 'mailto:imaad.danish003@gmail.com?subject=' +
+        encodeURIComponent('Project Inquiry — ' + project) +
+        '&body=' + encodeURIComponent(message);
+    }
+
+    typeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        typeButtons.forEach(item => item.classList.toggle('selected', item === button));
+        updateRequest();
+      });
+    });
+
+    timelineButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        timelineButtons.forEach(item => item.classList.toggle('selected', item === button));
+        updateRequest();
+      });
+    });
+
+    featureInputs.forEach(input => input.addEventListener('change', updateRequest));
+    updateRequest();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
